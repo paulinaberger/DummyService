@@ -1,5 +1,6 @@
 package org.mdsd2016.android.dummyservice;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,15 +36,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //}
         switch (whichView.getId()) {
             case R.id.btn_1:
-                Log.i(MainActivity.TAG, "startService button 1 has been clicked");
+                Log.i(MainActivity.TAG, "startService Start Service has been clicked");
+
+                Intent intent = new Intent(this, CustomStartService.class);
+                startService(intent);
+
                 break;
 
             case R.id.btn_2:
-                Log.i(MainActivity.TAG, "startService button 2 has been clicked");
+                Log.i(MainActivity.TAG, "startService Start Bound Service has been clicked");
                 break;
 
             case R.id.btn_3:
-                Log.i(MainActivity.TAG, "startService button 3 has been clicked");
+                Log.i(MainActivity.TAG, "startService Start Intent Service has been clicked");
                 break;
 
             default:
