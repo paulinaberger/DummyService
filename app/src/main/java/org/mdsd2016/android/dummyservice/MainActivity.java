@@ -1,12 +1,17 @@
 package org.mdsd2016.android.dummyservice;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -14,7 +19,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
+    BoundService mBoundService;
+
     private TextView mTvInfo;
+    private boolean mIsBound = false;
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder serviceInfo) {
+            mBoundService = new BoundService(serviceInfo);
+            mIsBound = true;
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mIsBound = false;
+
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.mTvInfo = (TextView) findViewById(R.id.top_txt_view);
 
 
+
+
     }
 
     @Override
@@ -52,6 +78,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_2:
                 Log.i(MainActivity.TAG, "startService Start Bound Service has been clicked");
+                Intent boundServiceIntent = new Intent(this, BoundService.class);
+                
+                bindService(boundServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
                 this.mTvInfo.setText("Bound Service was Clicked Yo!");
 
                 break;
@@ -64,7 +93,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_4:
                 Log.i(MainActivity.TAG, "Display Info Button has been clicked");
-                this.mTvInfo.setText("POTATO");
+ //             this.mTvInfo.setText("POTATO");
+
+                if (this.mIsBound) {
+                    int numberReturned = this.mBoundService.getRandomNumber();
+                    this.mTvInfo.setText(Integer.toString(numberReturned));
+                }
+                else {
+                    Toast.makeText(this, "No Service to buind to", Toast.LENGTH_SHORT).show();
+                }
+  //              int numberReturned = this.mBoundService.getRandomNumber();
+  //              this.mTvInfo.setText("Number is" + numberReturned);
 
                 break;
 
@@ -72,5 +111,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.v(MainActivity.TAG, "OnClickListener not matched");
         }
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unbindService(this.mServiceConnection);
     }
 }
