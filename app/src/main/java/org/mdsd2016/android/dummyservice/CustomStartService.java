@@ -1,7 +1,9 @@
 package org.mdsd2016.android.dummyservice;
 
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
@@ -39,9 +41,9 @@ public class CustomStartService extends Service {
 //
 //        method to wait a couple of seconds to make the thread sleep. Define integer called timelapse
 
-        waitForSomeTime(20);
+        waitForSomeTimeSeconds(2);
 //
-        int timeLapseSeconds = 20;
+        int timeLapseSeconds = 2;
         //want to define int that runs the process for 2 seconds
         //then we want to tell the system to calculate which is the time right now and add 2 seconds
         //and with that value, give a while - so wihle the time from now onwards is less than the time now
@@ -61,17 +63,14 @@ public class CustomStartService extends Service {
         return  Service.START_NOT_STICKY;
     }
 
-    
-
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-private void waitForSomeTime(int i) {
+    public static void waitForSomeTimeSeconds (int i) {
     //only method that we HAVE to overwrite
 
-    int timeLapseSeconds = 20;
+    int timeLapseSeconds = 5;
     long endTime = System.currentTimeMillis() + timeLapseSeconds * 1000;
 
     while (System.currentTimeMillis() < endTime) {
@@ -80,5 +79,6 @@ private void waitForSomeTime(int i) {
 
     }
 }
+
 
 }
