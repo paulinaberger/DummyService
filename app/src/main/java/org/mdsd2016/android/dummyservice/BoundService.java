@@ -57,8 +57,7 @@ public class BoundService extends Service {
     public int getRandomNumber(){
         //define what it's doing, we need to reeturn integer
         Random rn = new Random();
-        int n = rn.nextInt();
-        return n;
+        return new Random().nextInt();
 
   //      return new Random().nextInt();
 

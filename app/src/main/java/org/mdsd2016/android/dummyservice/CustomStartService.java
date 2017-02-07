@@ -60,7 +60,8 @@ public class CustomStartService extends Service {
         Log.i(CustomStartService.TAG, "In-onStartCommand");
 
 
-        return  Service.START_NOT_STICKY;
+  //      return  Service.START_NOT_STICKY;
+        return Service.START_STICKY;
     }
 
     @Override
